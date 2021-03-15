@@ -1,4 +1,3 @@
-
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
     Movie.create movie
@@ -22,4 +21,12 @@ Then /I should see all the movies/ do
   Movie.all.each do |movie|
     step %{I should see "#{movie.title}"}
   end
+
+Then(/^the director of "([^"]*)" should be "([^"]*)"$/) do |arg1, arg2|
+  movie_id = Movie.find_by(title: arg1) 
+  visit movie_path(movie_id) #visit movie details page
+  expect(page.body).to match(/Director:\s*#{arg2}/)
+  #match movie detail view for director to Director: arg2
+end  
+  
 end
